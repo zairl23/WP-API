@@ -312,14 +312,24 @@ function create_initial_json_routes() {
 			),
 		),
 	) );
-
+	register_json_route( 'wp', '/users/(?P<id>[\d]+)/posts', array(
+		'methods'         => WP_JSON_Server::READABLE,
+		'callback'        => array( $controller, 'get_item_posts' ),
+		'args'            => array(
+			'context'          => array(
+				'default'      => 'view',
+			),
+		),
+	) );
 	register_json_route( 'wp', '/users/me', array(
 		'methods'         => WP_JSON_Server::READABLE,
 		'callback'        => array( $controller, 'get_current_item' ),
 		'args'            => array(
-			'context'          => array(),
-		)
-	));
+			'context'          => array(
+				'default'      => 'view',
+			),
+		),
+	) );
 }
 add_action( 'wp_json_server_before_serve', 'create_initial_json_routes', 0 );
 

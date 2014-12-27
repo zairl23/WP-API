@@ -90,6 +90,35 @@ class WP_JSON_Users_Controller extends WP_JSON_Controller {
 	}
 
 	/**
+	 * Get Posts archive for a User
+	 *
+	 * @param WP_JSON_Request $request Full details about the request
+	 * @return mixed
+	 */
+	public function get_item_posts( $request ) {
+		$author_id = (int) $request['id'];
+		$user = get_userdata( $author_id );
+
+		if ( empty( $user->ID ) ) {
+			return new WP_Error( 'json_user_invalid_id', __( 'Invalid user ID.' ), array( 'status' => 400 ) );
+		}
+
+		global $wp_json_server;
+
+		$request->set_param( 'author', $author_id );
+		$params = $request->get_params();
+		unset( $params['id'] );
+
+		$request = new WP_JSON_Request( 'GET', '/wp/posts' );
+		$request->set_query_params( $params );
+
+		$response = $wp_json_server->dispatch( $request );
+		$response = json_ensure_response( $response );
+
+		return $response;
+	}
+
+	/**
 	 * Create a single user
 	 *
 	 * @param WP_JSON_Request $request Full details about the request
