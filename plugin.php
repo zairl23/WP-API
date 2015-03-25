@@ -417,6 +417,7 @@ function json_get_url_prefix() {
 	 *
 	 * @since 1.0
 	 *
+         * change by zairl23
 	 * @param string $prefix URL prefix. Default 'wp-json'.
 	 */
 	return apply_filters( 'json_url_prefix', 'api' );
